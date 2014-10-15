@@ -40,5 +40,5 @@ eta <- t(decomp.force$u[,1]) %*% t(as.matrix(carMarks[, 3:4]))
 phi <- t(decomp.force$v[,1]) %*% t(as.matrix(carMarks[, 5:10]))
 
 
-plot(eta, phi)
-text(eta, phi, labels = carMarks$Type)
+plot(-eta, -phi)
+text(-eta, -phi, labels = carMarks$Type)
