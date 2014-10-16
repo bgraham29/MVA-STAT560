@@ -1,0 +1,156 @@
+\documentclass{article}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{amsmath}
+
+\begin{document}
+\begin{itemize}
+\item[Q1]
+\begin{equation*}
+S_1 = \begin{matrix}
+2 & .5 \\
+.5 & 2 
+\end{matrix} \qquad\text{det}(S_1) = (4 - .25) = 3.75
+\end{equation*}
+\begin{equation*}
+S_2 = \begin{matrix}
+5 & 4 \\
+4 & 5 
+\end{matrix} \qquad \text{det}(S_2) = (25 - 16) = 9
+\end{equation*}
+\begin{eqnarray*}
+b_{0_1} & =  & \frac{1}{2} \begin{bmatrix}
+0 & 0
+\end{bmatrix} \begin{bmatrix}
+\frac{2}{3.75} & -\frac{.5}{3.75} \\
+-\frac{.5}{3.75} & \frac{2}{3.75}
+\end{bmatrix}
+\begin{bmatrix}
+0 \\
+0
+\end{bmatrix} + \frac{1}{2} \log(3.75) = 0.66 \\
+b_1 &  =  & \begin{bmatrix}
+\frac{2}{3.75} & -\frac{.5}{3.75} \\
+-\frac{.5}{3.75} & \frac{2}{3.75}
+\end{bmatrix} \begin{bmatrix}
+0 \\ 0
+\end{bmatrix} = 0\\
+c_1 & = & \frac{1}{2} \begin{bmatrix}
+\frac{2}{3.75} & -\frac{.5}{3.75} \\
+-\frac{.5}{3.75} & \frac{2}{3.75}
+\end{bmatrix}  = 
+\begin{bmatrix}
+\frac{1}{3.75} & -\frac{0.1}{3.75} \\
+-\frac{0.1}{3.75} & \frac{1}{3.75}
+\end{bmatrix}
+\end{eqnarray*}
+\begin{eqnarray*}
+b_{0_2} & = & \frac{1}{2} \begin{bmatrix}
+1 & 1
+\end{bmatrix} \begin{bmatrix}
+\frac{5}{9} & -\frac{4}{9} \\
+-\frac{4}{9} & \frac{5}{9}
+\end{bmatrix} 
+\begin{bmatrix}
+1 \\
+1
+\end{bmatrix}+ \frac{1}{2} \log(9) = \frac{1}{2} \times \frac{2}{9} + 1.10 = 1.21 \\
+b_2 & = & -\begin{bmatrix}
+\frac{5}{9} & -\frac{1}{9} \\
+-\frac{1}{9} & \frac{5}{9}
+\end{bmatrix} \begin{bmatrix}
+1 \\ 1
+\end{bmatrix} = - \begin{bmatrix}
+\frac{1}{9} & \frac{1}{9}
+\end{bmatrix} \\
+c_2 & = & \frac{1}{2} \begin{bmatrix}
+\frac{5}{9} & -\frac{4}{9} \\
+-\frac{4}{9} & \frac{5}{9}
+\end{bmatrix} = \begin{bmatrix}
+\frac{5}{18} & -\frac{2}{9} \\
+-\frac{2}{9} & \frac{5}{18}
+\end{bmatrix}
+\end{eqnarray*}
+Bayes classifier: identify as class 1 if:
+\begin{equation*}
+0.66 + \mathbf{X}^T \begin{bmatrix}
+\frac{1}{3.75} & -\frac{0.1}{3.75} \\
+-\frac{0.1}{3.75} & \frac{1}{3.75}
+\end{bmatrix} \le 1.21  -\begin{bmatrix}
+\frac{5}{9} & -\frac{1}{9} \\
+-\frac{1}{9} & \frac{5}{9}
+\end{bmatrix} \mathbf{X}^T + \mathbf{X}^T  \begin{bmatrix}
+\frac{5}{18} & -\frac{2}{9} \\
+-\frac{2}{9} & \frac{5}{18}
+\end{bmatrix} \mathbf{X}
+\end{equation*}
+
+place marker: present it graphically in the plane
+
+\item[Q2]
+
+\item[Q3]
+\item[Q4]
+\begin{eqnarray*}
+\Sigma_{11} & = & \Sigma_{22} = \begin{bmatrix}
+1 & \rho \\
+\rho & 1
+\end{bmatrix} \qquad \Sigma_{11}^{-1} = (1- \rho)^2 \begin{bmatrix}
+1 & -\rho \\
+-\rho & 1
+\end{bmatrix} \\
+\Sigma_{12} & = & \Sigma_{21} = \begin{bmatrix}
+\rho & \rho \\
+\rho & \rho
+\end{bmatrix} \\
+B & = & A = \Sigma_{11}^{-1}\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21} \\
+& = & (1 - \rho^2)\begin{bmatrix}
+1 & -\rho \\
+-\rho & 1
+\end{bmatrix} \begin{bmatrix}
+\rho & \rho \\
+\rho & \rho
+\end{bmatrix}  (1 - \rho^2)\begin{bmatrix}
+1 & -\rho \\
+-\rho & 1
+\end{bmatrix} \begin{bmatrix}
+\rho & \rho \\
+\rho & \rho
+\end{bmatrix}\\
+& = & \begin{bmatrix}
+\frac{\rho^2}{1 - \rho^2} & \frac{\rho^2}{1 - \rho^2} \\
+\frac{\rho^2}{1 - \rho^2} & \frac{\rho^2}{1 - \rho^2}
+\end{bmatrix}
+\end{eqnarray*}
+\begin{equation*}
+P \overset{set}{=} \frac{\rho^2}{1 - \rho^2}
+\end{equation*}
+To find the eigenvalues and eigenvectors, solve
+\begin{eqnarray*}
+\begin{bmatrix}
+P - \lambda & P \\
+P & P - \lambda
+\end{bmatrix} & = & \mathbf{0} \\
+(P - \lambda)^2 - P^2 & = & 0\\
+P^2 - 2P\lambda + \lambda^2 - P^2 & = & 0 \\
+\lambda^2 - 2P\lambda & = & 0 \\
+\lambda^2 & = & 2P\lambda \\
+\lambda & = & 2P = \frac{\rho^2}{1 - \rho^2}
+\end{eqnarray*}
+Find (x, y) such that
+\begin{eqnarray*}
+\begin{bmatrix}
+P & P \\
+P & P
+\end{bmatrix}\begin{bmatrix}
+x \\ y
+\end{bmatrix} & = & 2P\begin{bmatrix}
+x \\ y
+\end{bmatrix}
+\end{eqnarray*}
+\begin{eqnarray*}
+x & = & y \\
+(x, y) & = & \left(\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}\right) = \mathbf{a} = \mathbf{b}
+\end{eqnarray*}
+\item[Q5]
+\end{itemize}
+\end{document}
