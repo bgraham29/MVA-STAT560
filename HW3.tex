@@ -1,21 +1,25 @@
 \documentclass{article}
-\usepackage[margin=0.5in]{geometry}
+\usepackage[margin=1in]{geometry}
 \usepackage{amsmath}
 
 \begin{document}
+Barbara Andre
+HW 3, October 17, 2014
+STAT 560
+
 \begin{itemize}
 \item[Q1]
 \begin{equation*}
-S_1 = \begin{matrix}
+S_1 = \begin{bmatrix}
 2 & .5 \\
 .5 & 2 
-\end{matrix} \qquad\text{det}(S_1) = (4 - .25) = 3.75
+\end{bmatrix} \qquad\text{det}(S_1) = (4 - .25) = 3.75
 \end{equation*}
 \begin{equation*}
-S_2 = \begin{matrix}
+S_2 = \begin{bmatrix}
 5 & 4 \\
 4 & 5 
-\end{matrix} \qquad \text{det}(S_2) = (25 - 16) = 9
+\end{bmatrix} \qquad \text{det}(S_2) = (25 - 16) = 9
 \end{equation*}
 \begin{eqnarray*}
 b_{0_1} & =  & \frac{1}{2} \begin{bmatrix}
@@ -28,12 +32,14 @@ b_{0_1} & =  & \frac{1}{2} \begin{bmatrix}
 0 \\
 0
 \end{bmatrix} + \frac{1}{2} \log(3.75) = 0.66 \\
-b_1 &  =  & \begin{bmatrix}
+b_1 &  =  & -\begin{bmatrix}
 \frac{2}{3.75} & -\frac{.5}{3.75} \\
 -\frac{.5}{3.75} & \frac{2}{3.75}
 \end{bmatrix} \begin{bmatrix}
 0 \\ 0
-\end{bmatrix} = 0\\
+\end{bmatrix} = \begin{bmatrix}
+0 \\ 0
+\end{bmatrix}\\
 c_1 & = & \frac{1}{2} \begin{bmatrix}
 \frac{2}{3.75} & -\frac{.5}{3.75} \\
 -\frac{.5}{3.75} & \frac{2}{3.75}
@@ -60,7 +66,7 @@ b_2 & = & -\begin{bmatrix}
 \end{bmatrix} \begin{bmatrix}
 1 \\ 1
 \end{bmatrix} = - \begin{bmatrix}
-\frac{1}{9} & \frac{1}{9}
+\frac{1}{9} \\ \frac{1}{9}
 \end{bmatrix} \\
 c_2 & = & \frac{1}{2} \begin{bmatrix}
 \frac{5}{9} & -\frac{4}{9} \\
@@ -72,23 +78,53 @@ c_2 & = & \frac{1}{2} \begin{bmatrix}
 \end{eqnarray*}
 Bayes classifier: identify as class 1 if:
 \begin{equation*}
-0.66 + \mathbf{X}^T \begin{bmatrix}
+0.66 + \mathbf{x} \begin{bmatrix}
 \frac{1}{3.75} & -\frac{0.1}{3.75} \\
 -\frac{0.1}{3.75} & \frac{1}{3.75}
-\end{bmatrix} \le 1.21  -\begin{bmatrix}
-\frac{5}{9} & -\frac{1}{9} \\
--\frac{1}{9} & \frac{5}{9}
-\end{bmatrix} \mathbf{X}^T + \mathbf{X}^T  \begin{bmatrix}
+\end{bmatrix}\mathbf{x}^T \le 1.21  -\begin{bmatrix}
+\frac{1}{9} & \frac{1}{9}
+\end{bmatrix} \mathbf{x}^T + \mathbf{x}  \begin{bmatrix}
 \frac{5}{18} & -\frac{2}{9} \\
 -\frac{2}{9} & \frac{5}{18}
-\end{bmatrix} \mathbf{X}
+\end{bmatrix} \mathbf{x}^T
 \end{equation*}
 
 place marker: present it graphically in the plane
 
 \item[Q2]
-
+Bayes classifier: identify as class 1 if:
+\begin{eqnarray*}
+\left(\begin{bmatrix}1 \\ 1 \end{bmatrix} - \begin{bmatrix} 0 \\ 0 \end{bmatrix}\right)^T
+\mathbf{I} \left(\mathbf{x} - \frac{1}{2}\left(\begin{bmatrix}1 \\ 1 \end{bmatrix} + \begin{bmatrix} 0 \\ 0 \end{bmatrix}\right)\right) & \ge & \log\left(\frac{\pi_1}{\pi_2}\right) \\
+\begin{bmatrix}
+1 & 1
+\end{bmatrix}\left(\mathbf{x} - \begin{bmatrix}
+\frac{1}{2} \\ \frac{1}{2}
+\end{bmatrix}\right) & \ge & 0
+\end{eqnarray*}
+Thus:
+\begin{eqnarray}
+\mathbf{v} & = & \begin{bmatrix} 1 \\ 1 \end{bmatrix} \\
+\mathbf{x}_0 & = & \begin{bmatrix} \frac{1}{2} \\ \frac{1}{2} \end{bmatrix} 
+\end{eqnarray}
 \item[Q3]
+Banknotes
+\newline
+\begin{tabular}{l | c c | c c | c c |}
+Classifier & LDA && QDA && Nearest Centroid  & \\
+& Train & Test & Train & Test & Train & Test \\
+\hline
+cv1 & 0 & 0.006 & 0 & 0.011 & - & - \\
+cv2 & 0 & 0.072 & 0 & 0.172 & - & - \\
+cv3 & 0 & 0.006 & 0 & 0.006 & - & - \\
+cv4 & 0 & 0.011 & 0 & 0.050 & - & - \\
+cv5 & 0 & 0.017 & 0 & 0.211 & - & - \\
+cv6 & 0 & 0.039 & 0 & 0.067 & - & - \\
+cv7 & 0 & 0.006 & 0 & 0.011 & - & - \\
+cv8 & 0 & 0.011 & 0 & 0.100 & - & - \\
+cv9 & 0 & 0.033 & 0 & 0.044 & - & - \\
+cv10 & 0 & 0.000 & 0 & 0.111 & - & - \\
+\end{tabular}
 \item[Q4]
 \begin{eqnarray*}
 \Sigma_{11} & = & \Sigma_{22} = \begin{bmatrix}
@@ -151,6 +187,32 @@ x \\ y
 x & = & y \\
 (x, y) & = & \left(\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}\right) = \mathbf{a} = \mathbf{b}
 \end{eqnarray*}
+The canonical variates are $\mathbf{a}^T\mathbf{X}$ and $\mathbf{b}^T\mathbf{Y}$.
+\begin{equation*}
+\begin{bmatrix}
+\frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}}
+\end{bmatrix} \mathbf{X} \qquad \begin{bmatrix}
+\frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}}
+\end{bmatrix} \mathbf{Y} 
+\end{equation*}
 \item[Q5]
+\begin{itemize}
+\item Canonical Covariates pair and correlation\\
+
+\begin{eqnarray*}
+U_1 & = & X_1 - 0.003X_2 \\
+V_1 & = & -.52Y_1 - 0.85Y_2\\
+\rho^2_1 & = & 0.107
+\end{eqnarray*}
+\begin{eqnarray*}
+U_2 & = & -.52X_1 + 0.85X_2 \\
+V_2 & = & =.92X_1 + 0.38X_2 \\
+\rho^2_2 & = & 0.029
+\end{eqnarray*}
+\item Hypothesis test \\
+Calculated statistic = $-(48 - 1 - \frac{1}{2} (2 + 2 + 1))\log\prod_{i = 1}^2(1 - \hat{\rho}^2) = 6.34$\\
+$\chi^2_{2*2}(.05) = 9.49$
+The calculated statistic is less than the critical value. Do not reject $H_0: \Sigma_{22} = 0$ at $\alpha = 0.05$.
+\end{itemize}
 \end{itemize}
 \end{document}
