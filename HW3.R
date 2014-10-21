@@ -9,8 +9,8 @@ mu2 <- matrix(c(1,1))
 
 b01 <- 1/2 * t(mu1) %*% solve(S1) %*% mu1 + 1/2 * log(det(S1))
 b02 <- 1/2 * t(mu2) %*% solve(S2) %*% mu2 + 1/2 * log(det(S2))
-b1 <- 1/2 * -solve(S1) %*% mu1
-b2 <- 1/2 * -solve(S2) %*% mu2
+b1 <- -solve(S1) %*% mu1
+b2 <- -solve(S2) %*% mu2
 c1 <- 1/2 * solve(S1)
 c2 <- 1/2 * solve(S2)
 
@@ -18,11 +18,26 @@ b01; b1; c1
 b02; b2; c2
 
 require(MASS)
-M <- mvrnorm(n = 100, mu1, S1)
+x1 <- mvrnorm(n = 100, mu1, S1)
+x2 <- mvrnorm(n = 100, mu2, S2)
 
-f1 <- b01 + t(b1) %*% t(M) + t(M) %*% c1 %*% M
+
+plot(x2[, 1], x2[, 2], col = "blue", xlab = "x1", ylab = "x2")
+points(x1[, 1], x1[, 2], col = "red")
+points(1, 1, pch = 18, cex = 2, col = "blue")
+points(0, 0, pch = 18, cex = 2, col = "red")
+points(.5, 2, pch = 20, cex = 2.5, col = "red")
+points(.5, 2, pch = 20, cex = 1.5, col = "green")
+points(4, 2, pch = 20, cex = 2.5, col = "blue")
+points(4, 2, pch = 20, cex = 1.5, col = "green")
 
 
+M <- matrix(c(.5, 2), nrow = 2)
+M <- matrix(c(4, 2), nrow = 2)
+
+f1 <- b01 + t(b1) %*% M + t(M) %*% c1 %*% M
+f2 <- b02 + t(b2) %*% M  + t(M) %*% c2 %*% M
+f1;f2
 ################################################################################
 
 # Q3
@@ -63,18 +78,71 @@ truecls <- banknote$Y[-train]
 sum(predtestcls != truecls)/length(predtestcls)
 
 # NEAREST CENTROID 
-train <- crossVal[[1]]
-PC <- eigen(cov(banknote[train, -7]))$vectors[,1]
+train <- crossVal[[2]]
 mu1 <- apply(subset(banknote[train,], banknote[train,]$Y == 1), 2, 
     mean)[-7]
 mu0 <- apply(subset(banknote[train,], banknote[train,]$Y == 0), 2, 
     mean)[-7]
-n <- nrow(banknote[-train, ]))
-preds <- rep(NA, nrow(banknote[-train,]))
-for(i in 1:nrow
-dist1 <- sqrt(sum((banknote[1, -7] - mu1)^2))
-dist0 <- sqrt(sum((banknote[1, -7] - mu0)^2))
-ifelse(dist1 < dist0, 1, 0)
+S1 <- cov(subset(banknote[train, -7], banknote[train, ]$Y== 1))
+S0 <- cov(subset(banknote[train, -7], banknote[train, ]$Y== 0))
+X <- as.matrix(banknote[train,-7])
+n <- nrow(X)
+predictedClass <- rep(NA, n)
+for(i in 1:n){
+    L1 <- (t(X[i, ]) - mu1) %*% solve(S1) %*% t(t(X[i, ]) - mu1) + log(det(S1))
+    L0 <- (t(X[i, ]) - mu0) %*% solve(S0) %*% t(t(X[i, ]) - mu0) + log(det(S0))
+    predictedClass[i] <- ifelse(L1 < L0, 1, 0)
+}
+
+
+# NEAREST CENTROID using PC projection
+train <- crossVal[[4]]
+PC <- eigen(cov(banknote[train,-7]))
+mu1 <- apply(subset(banknote[train,], banknote[train,]$Y == 1), 2, 
+    mean)[-7] %*% PC$vectors[1, ]
+mu0 <- apply(subset(banknote[train,], banknote[train,]$Y == 0), 2, 
+    mean)[-7] %*% PC$vectors[1, ]
+X <- as.matrix(banknote[train,-7])
+scores <- as.vector(X %*% PC$vectors[1, ])
+predtraincls <- ifelse(sqrt((scores - mu1)^2) < 
+    sqrt((scores - mu0)^2), 1, 0)
+sum(predtraincls != banknote$Y[train])/length(predtraincls)
+
+Y <- as.matrix(banknote[-train, -7])
+scores <- as.vector(Y %*% PC$vectors[1, ])
+predtestcls<- ifelse(sqrt((scores - mu1)^2) < 
+    sqrt((scores - mu0)^2), 1, 0)
+#true labels
+truecls <- banknote$Y[-train]
+#compute testing misclassification rate
+sum(predtestcls != truecls)/length(predtestcls)
+
+# NEAREST CENTROID using Euclidean distance
+train <- crossVal[[10]]
+mu1 <- matrix(apply(subset(banknote[train,], banknote[train,]$Y == 1), 2, 
+    mean)[-7], ncol = 1)
+mu0 <- matrix(apply(subset(banknote[train,], banknote[train,]$Y == 0), 2, 
+    mean)[-7], ncol = 1)
+X <- as.matrix(banknote[train,-7])
+predtraincls <- rep(NA, 20)
+for(i in 1:20) {
+    d1 <- sum((X[i, ] - mu1)^2)
+    d0 <- sum((X[i, ] - mu0)^2)
+    predtraincls[i] <- ifelse(d1 < d0, 1, 0)
+}
+sum(predtraincls != banknote$Y[train])/length(predtraincls)
+
+Y <- as.matrix(banknote[-train, -7])
+predtestcls <- rep(NA, nrow(Y))
+for(i in 1:nrow(Y)) {
+    d1 <- sum((Y[i, ] - mu1)^2)
+    d0 <- sum((Y[i, ] - mu0)^2)
+    predtestcls[i] <- ifelse(d1 < d0, 1, 0)
+}
+#true labels
+truecls <- banknote$Y[-train]
+#compute testing misclassification rate
+sum(predtestcls != truecls)/length(predtestcls)
 
 ################################################################################
 
