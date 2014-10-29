@@ -107,23 +107,19 @@ t(a) %*% x.bar	# 189.3
 sqrt((n-1)/n * p/(n-p) * qf(.05, p, n-p, lower.tail = FALSE) * 
     (t(a) %*% S %*% a))
 
+# c
+n1 <- nrow(male[-31, ])
+n2 <- nrow(female)
+Smale <- cov(male[-31, ])
+Sfemale <- cov(female)
+
+Sp <- ((n1 - 1) * Smale + (n2 - 1) * Sfemale) / (n + n -2)
+T2 <- (n1 * n2) /(n1 + n2) * t(as.matrix(x.bar - female.means)) %*% solve(Sp) %*% 
+    as.matrix(x.bar - female.means)
+
 
 # Q2: R code that will generate random sample of size n from multivariate
 #   normal with mean m0 and covariance S0.
-
-rmvnorm <- function(n = 100, m0, S0) {
-    p <- length(m0)
-    x <- matrix(rep(NA,n*p), nrow = n)
-    for(i in 1:p) {
-        x[ , i] <- rnorm(n)
-    }
-    Lambda <- diag(E.S0$values)
-    phi <- E.S0$vectors
-    Q <- Lambda %^% (-1/2) %*% phi 
-    y <- (Q %*% t(x))
-    y <- apply(y, 1, function(x) x + m0)
-    return(y)
-}
 
 rMVN <- function(n = 100, m0, S0) {
     p <- length(m0)
@@ -136,4 +132,31 @@ rMVN <- function(n = 100, m0, S0) {
     t(y)
 }
 
+
+# Q3
+
+n <- 100
+p <- 5
+Sigma <- diag(1, p)
+Sigma[1,1] <- 5
+Mu <- rep(0, p)t
+
+U <- NULL
+V <- NULL
+for(i in 1:300) {
+    x <- rMVN(n, Mu, Sigma)
+    x.bar <- as.matrix(apply(x, 2, mean))
+    S <- cov(x)
+    U[i] <- n * t(x.bar) %*% solve(S) %*% x.bar
+    V[i] <- n* t(x.bar) %*% diag(diag(solve(S))) %*% x.bar
+}
+
+temp <- qchisq((1:300 - .5)/300, 5)
+plot(sort(temp), sort(U), main = expression(paste("Q-Q Plot for ", chi[(5)]^2,
+     " distribution - variable U")), xlab = "Theoretical", ylab = "Observed")
+abline(0,1, col = "blue")
+
+plot(sort(temp), sort(V), main = expression(paste("Q-Q Plot for ", chi[(5)]^2,
+     " distribution - variable V")), xlab = "Theoretical", ylab = "Observed")
+abline(0,1, col = "blue")
 
